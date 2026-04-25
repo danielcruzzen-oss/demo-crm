@@ -85,6 +85,7 @@ document.getElementById('deal-form').addEventListener('submit', async (e) => {
   const deal = {
     nombre: document.getElementById('nombre').value.trim(),
     empresa: document.getElementById('empresa').value.trim(),
+    email: document.getElementById('email').value.trim(),
     valor: Number(document.getElementById('valor').value),
     etapa: document.getElementById('etapa').value,
     fecha: new Date().toISOString(),

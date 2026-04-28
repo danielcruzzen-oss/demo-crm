@@ -66,18 +66,37 @@ async function saveDeal(deal) {
   showToast('Deal guardado correctamente', 'success');
 }
 
-async function sendContract(index) {
+let pendingContractIndex = null;
+
+function sendContract(index) {
   const deal = deals[index];
+  pendingContractIndex = index;
+  document.getElementById('modal-deal-name').textContent = `${deal.nombre} — ${deal.empresa}`;
+  document.getElementById('modal-email').value = deal.email || '';
+  document.getElementById('contract-modal').classList.add('open');
+  document.getElementById('modal-email').focus();
+}
+
+function closeContractModal() {
+  document.getElementById('contract-modal').classList.remove('open');
+  pendingContractIndex = null;
+}
+
+async function confirmSendContract() {
+  const email = document.getElementById('modal-email').value.trim();
+  if (!email) return;
+  const deal = deals[pendingContractIndex];
+  closeContractModal();
   const res = await fetch('/api/contracts/send', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ dealId: deal.id, recipient: deal.email }),
+    body: JSON.stringify({ dealId: deal.id, recipient: email, dealName: deal.nombre }),
   });
   if (!res.ok) {
     showToast('Error al enviar el contrato', 'error');
     return;
   }
-  showToast(`Contrato enviado a ${deal.empresa}`, 'success');
+  showToast(`Contrato enviado a ${email}`, 'success');
 }
 
 document.getElementById('deal-form').addEventListener('submit', async (e) => {
@@ -94,6 +113,13 @@ document.getElementById('deal-form').addEventListener('submit', async (e) => {
   renderDeals();
   e.target.reset();
   await saveDeal(deal);
+  if (deal.etapa === 'cerrado') {
+    sendContract(deals.length - 1);
+  }
+});
+
+document.getElementById('contract-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeContractModal();
 });
 
 renderDeals();

@@ -81,6 +81,18 @@
     #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: 0.875rem 1.25rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; box-shadow: 0 4px 20px rgba(0,0,0,0.12); display: none; z-index: 999; max-width: 320px; }
     #toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #6ee7b7; }
     #toast.error   { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: #fff; border-radius: 12px; padding: 2rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .modal h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .modal-sub { color: #64748b; font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .modal-deal { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.75rem 1rem; font-size: 0.875rem; font-weight: 600; margin-bottom: 1.25rem; color: #1a1a2e; }
+    .modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+    .btn-cancel { flex: 1; padding: 0.65rem; background: #f1f5f9; color: #475569; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; }
+    .btn-cancel:hover { background: #e2e8f0; }
+    .btn-send { flex: 2; padding: 0.65rem; background: #16a34a; color: #fff; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; }
+    .btn-send:hover { background: #15803d; }
   </style>
 </head>
 <body>
@@ -143,6 +155,10 @@
             <input id="empresa" type="text" placeholder="Ej: Acme Corp" required />
           </div>
           <div class="form-group">
+            <label for="email">Email del contacto</label>
+            <input id="email" type="email" placeholder="Ej: contacto@acme.com" required />
+          </div>
+          <div class="form-group">
             <label for="valor">Valor (USD)</label>
             <input id="valor" type="number" placeholder="Ej: 12000" min="0" required />
           </div>
@@ -164,6 +180,23 @@
 </main>
 
 <div id="toast"></div>
+
+<div class="modal-overlay" id="contract-modal">
+  <div class="modal">
+    <h3>Confirmar envío de contrato</h3>
+    <p class="modal-sub">Verifica el email del firmante antes de enviar.</p>
+    <div class="modal-deal" id="modal-deal-name"></div>
+    <div class="form-group" style="margin-bottom:0">
+      <label for="modal-email">Email del firmante</label>
+      <input id="modal-email" type="email" placeholder="contacto@empresa.com" required />
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeContractModal()">Cancelar</button>
+      <button class="btn-send" onclick="confirmSendContract()">📄 Enviar contrato</button>
+    </div>
+  </div>
+</div>
+
 <script src="deals.js"></script>
 </body>
 </html>

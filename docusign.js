@@ -4,11 +4,11 @@ async function createEnvelope(deal) {
   const token = await getAccessToken();
 
   const envelope = {
-    emailSubject: `Contrato comercial: ${deal.nombre}`,
+    emailSubject: `Contrato: ${deal.nombre} — ${deal.empresa}`,
     documents: [
       {
         documentId: '1',
-        name: 'contrato.pdf',
+        name: `Contrato - ${deal.nombre}.pdf`,
         fileExtension: 'pdf',
         documentBase64: generateContractBase64(deal),
       },
